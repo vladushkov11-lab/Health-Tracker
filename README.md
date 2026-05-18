@@ -58,6 +58,7 @@ Swagger Frontend: http://localhost:8003/docs
 docker-compose down
 ```
 🧪 Тестирование
+
 Проект покрыт тестами (pytest) которые поднимаются вместе с проектом 
 
 
@@ -88,10 +89,10 @@ BMI, BMR, рекомендации по активности
 Автоматические инсайты (например: "Вы мало спали 3 дня подряд")
 
 🛠 Технологии
-Категория	Технологии
-Backend	Python 3.11, FastAPI, Uvicorn
-Базы данных	PostgreSQL, SQLAlchemy (async), Alembic
-Аутентификация	JWT, python-jose, bcrypt
+```
+Backend -	Python 3.11, FastAPI, Uvicorn.
+Базы данных -	PostgreSQL, SQLAlchemy (async), Alembic
+Аутентификация -	JWT, python-jose, bcrypt
 Тестирование	Pytest, pytest-asyncio, httpx (mock)
 Контейнеризация	Docker, Docker Compose
 Фронтенд	Jinja2, Chart.js
