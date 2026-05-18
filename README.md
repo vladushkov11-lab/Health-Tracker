@@ -2,8 +2,6 @@
 
 Микросервисный трекер здоровья на **FastAPI** с аутентификацией через JWT в **HttpOnly cookies**, контейнеризацией **Docker** и тестами **pytest**.
 
-**Демо:** `https://your-app.up.railway.app/docs`
-
 ---
 
 ## 📦 Архитектура
