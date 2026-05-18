@@ -96,4 +96,19 @@ Backend -	Python 3.11, FastAPI, Uvicorn.
 Тестирование -	Pytest, pytest-asyncio, httpx (mock)
 Контейнеризация -	Docker, Docker Compose
 Фронтенд -	Jinja2, Chart.js
+```
+```mermaid
+graph TD
+    Client[Пользователь<br>браузер] -->|HTTP| Frontend[Frontend<br>порт 8003]
 
+    Frontend -->|API запросы| Gateway[API Gateway<br>порт 8001]
+
+    subgraph "Бэкенд"
+        Gateway -->|/api/v1/login| Auth[Auth Service<br>порт 8000]
+        Gateway -->|/app/get_metrics<br>X-User-Id| App[App Service<br>порт 8002]
+    end
+
+    subgraph "Базы данных"
+        Auth -->|SQL| AuthDB[(PostgreSQL<br>Auth DB)]
+        App -->|SQL| AppDB[(PostgreSQL<br>App DB)]
+    end
