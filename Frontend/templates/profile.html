@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - Health Tracker</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=5.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
+    
+    <!-- ПРИМЕНЯЕМ ТЕМУ ДО ЗАГРУЗКИ -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="/" class="nav-link">Health<span>Tracker</span></a>
+            </div>
+            <div class="nav-user">
+                <span id="profile-user-name">Пользователь</span>
+                <a href="/stats" class="btn-secondary">Статистика</a>
+                <a href="/" class="btn-secondary">Дашборд</a>
+                <a href="/about" class="btn-secondary">О нас</a>
+                <a href="/docs" class="btn-secondary">Документация</a>
+                <a href="/project" class="btn-secondary">О проекте</a>
+                <button id="theme-toggle" class="theme-toggle" title="Переключить тему">🌙</button>
+                <button id="profile-logout-btn" class="btn-secondary">Выйти</button>
+            </div>
+        </nav>
+
+        <main class="profile">
+            <div class="profile-header">
+                <h2>Профиль пользователя</h2>
+            </div>
+
+            <div class="profile-card fade-in-up stagger-1">
+                <h3>📧 Основная информация</h3>
+                <form id="profile-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-firstname">Имя</label>
+                            <input type="text" id="profile-firstname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-lastname">Фамилия</label>
+                            <input type="text" id="profile-lastname" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-email">Email</label>
+                            <input type="email" id="profile-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-phone">Телефон</label>
+                            <input type="tel" id="profile-phone" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">Сохранить изменения</button>
+                    <p id="profile-message" class="success-message"></p>
+                </form>
+            </div>
+
+            <div class="profile-card fade-in-up stagger-2">
+                <h3>💪 Здоровье и цели</h3>
+                <form id="health-profile-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-height">Рост (см)</label>
+                            <input type="number" id="profile-height" min="50" max="300" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-weight">Вес (кг)</label>
+                            <input type="number" id="profile-weight" min="20" max="500" step="0.1">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-target-weight">Целевой вес (кг)</label>
+                            <input type="number" id="profile-target-weight" min="20" max="500" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-daily-step-goal">Цель по шагам</label>
+                            <input type="number" id="profile-daily-step-goal" min="1000" max="50000" step="100">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-gender">Пол</label>
+                            <select id="profile-gender">
+                                <option value="">Не указано</option>
+                                <option value="male">Мужской</option>
+                                <option value="female">Женский</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-birth-date">Дата рождения</label>
+                            <input type="date" id="profile-birth-date">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">Сохранить профиль</button>
+                    <p id="health-profile-message" class="success-message"></p>
+                </form>
+            </div>
+
+            <div class="profile-card fade-in-up stagger-3">
+                <h3>📊 Статистика за последние 10 дней</h3>
+                <div id="stats-content" class="stats-content">
+                    <p class="loading-message">Загрузка статистики...</p>
+                </div>
+                <button id="refresh-stats-btn" class="btn-secondary" style="margin-top: 20px;">Обновить статистику</button>
+            </div>
+
+            <div class="profile-card fade-in-up stagger-4 danger-zone">
+                <h3>⚠️ Опасная зона</h3>
+                <p>Удаление аккаунта необратимо. Все ваши данные будут потеряны.</p>
+                <button id="delete-account-btn" class="btn-danger">Удалить аккаунт</button>
+            </div>
+        </main>
+    </div>
+    <script src="/static/js/common.js?v=4.0"></script>
+    <script src="/static/js/profile.js?v=4.0"></script>
+</body>
+</html>

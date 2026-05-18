@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дашборд - Health Tracker</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=5.1">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
+    
+    <!-- ПРИМЕНЯЕМ ТЕМУ ДО ЗАГРУЗКИ -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="/" class="nav-link">Health<span>Tracker</span></a>
+            </div>
+            <div class="nav-user">
+                <span id="user-name">Пользователь</span>
+                <a href="/stats" class="btn-secondary">📊 Статистика</a>
+                <a href="/profile" class="btn-secondary">Профиль</a>
+                <a href="/about" class="btn-secondary">О нас</a>
+                <a href="/docs" class="btn-secondary">Документация</a>
+                <a href="/project" class="btn-secondary">О проекте</a>
+                <button id="theme-toggle" class="theme-toggle" title="Переключить тему">🌙</button>
+                <button id="logout-btn" class="btn-secondary">Выйти</button>
+            </div>
+        </nav>
+
+        <main class="dashboard">
+            <div class="dashboard-header">
+                <h2>Мои метрики</h2>
+                <div style="display: flex; gap: 10px;">
+                    <a href="/stats" class="btn-secondary">📈 Полная статистика</a>
+                    <button id="add-metric-btn" class="btn-primary">+ Добавить метрики</button>
+                </div>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="stats-grid">
+                <div class="stat-card fade-in-up stagger-1">
+                    <div class="stat-icon">👣</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="total-steps">0</span>
+                        <span class="stat-label">Шагов</span>
+                    </div>
+                </div>
+                <div class="stat-card fade-in-up stagger-2">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="total-calories">0</span>
+                        <span class="stat-label">Калории</span>
+                    </div>
+                </div>
+                <div class="stat-card fade-in-up stagger-3">
+                    <div class="stat-icon">📏</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="total-distance">0</span>
+                        <span class="stat-label">Км</span>
+                    </div>
+                </div>
+                <div class="stat-card fade-in-up stagger-4">
+                    <div class="stat-icon">😴</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="avg-sleep">0</span>
+                        <span class="stat-label">Часов сна</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metrics Table -->
+            <div class="metrics-section">
+                <h3>История метрик</h3>
+                <div class="table-container">
+                    <table id="metrics-table">
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Шаги</th>
+                                <th>Калории</th>
+                                <th>Дистанция</th>
+                                <th>Сон</th>
+                                <th>Настроение</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="metrics-body">
+                        </tbody>
+                    </table>
+                </div>
+                <p id="no-metrics" class="empty-message">Нет записей. Добавьте свои первые метрики!</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Metric Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Добавить метрики</h3>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <form id="metric-form">
+                <input type="hidden" id="metric-id">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="metric-date">Дата</label>
+                        <input type="date" id="metric-date" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="metric-steps">Шаги</label>
+                        <input type="number" id="metric-steps" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="metric-calories">Калории (ккал)</label>
+                        <input type="number" id="metric-calories" min="0" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="metric-distance">Дистанция (км)</label>
+                        <input type="number" id="metric-distance" min="0" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="metric-sleep-hours">Часы сна</label>
+                        <input type="number" id="metric-sleep-hours" min="0" max="24" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="metric-sleep-score">Качество сна (1-10)</label>
+                        <input type="number" id="metric-sleep-score" min="1" max="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="metric-calories-intake">Калории в пище</label>
+                        <input type="number" id="metric-calories-intake" min="0" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="metric-water">Вода (мл)</label>
+                        <input type="number" id="metric-water" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="metric-mood">Настроение (1-10)</label>
+                        <input type="number" id="metric-mood" min="1" max="10" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="metric-stress">Уровень стресса (1-10)</label>
+                    <input type="number" id="metric-stress" min="1" max="10" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="cancel-btn">Отмена</button>
+                    <button type="submit" class="btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/common.js?v=4.0"></script>
+    <script src="/static/js/dashboard.js?v=4.0"></script>
+</body>
+</html>

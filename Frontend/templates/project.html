@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О проекте - Health Tracker</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=3.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
+</head>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О проекте - Health Tracker</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=5.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
+    
+    <!-- ПРИМЕНЯЕМ ТЕМУ ДО ЗАГРУЗКИ -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="/" class="nav-link">Health<span>Tracker</span></a>
+            </div>
+            <div class="nav-user">
+                <a href="/" class="btn-secondary">Дашборд</a>
+                <a href="/stats" class="btn-secondary">Статистика</a>
+                <a href="/docs" class="btn-secondary">Документация</a>
+                <a href="/about" class="btn-secondary">О нас</a>
+                <button id="theme-toggle" class="theme-toggle" title="Переключить тему">🌙</button>
+            </div>
+        </nav>
+
+        <main class="dashboard">
+            <div class="dashboard-header" style="text-align: center;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 10px;">О проекте</h1>
+                <p style="color: var(--text-secondary);">Технологии и архитектура Health Tracker</p>
+            </div>
+
+            <div class="info-card">
+                <h3>🏗️ Архитектура</h3>
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px;">
+                    Проект построен на основе микросервисной архитектуры с использованием современных технологий:
+                </p>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <div class="tech-icon">⚡</div>
+                        <div class="tech-name">FastAPI</div>
+                        <div class="tech-desc">Backend API</div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🐍</div>
+                        <div class="tech-name">Python 3.11</div>
+                        <div class="tech-desc">Язык программирования</div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🐘</div>
+                        <div class="tech-name">PostgreSQL</div>
+                        <div class="tech-desc">База данных</div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🐳</div>
+                        <div class="tech-name">Docker</div>
+                        <div class="tech-desc">Контейнеризация</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>📦 Сервисы</h3>
+                <table class="service-table">
+                    <thead>
+                        <tr>
+                            <th>Сервис</th>
+                            <th>Порт</th>
+                            <th>Назначение</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="color: var(--primary-light);">Gateway</td>
+                            <td>8001</td>
+                            <td style="color: var(--text-secondary);">API Gateway, маршрутизация</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--primary-light);">Auth Service</td>
+                            <td>8000</td>
+                            <td style="color: var(--text-secondary);">Аутентификация, авторизация</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--primary-light);">App Service</td>
+                            <td>8002</td>
+                            <td style="color: var(--text-secondary);">Метрики, профили, статистика</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--primary-light);">Frontend</td>
+                            <td>8003</td>
+                            <td style="color: var(--text-secondary);">Веб-интерфейс</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-card">
+                <h3>🔐 Безопасность</h3>
+                <div style="color: var(--text-secondary); line-height: 1.8;">
+                    <p style="margin-bottom: 15px;">✓ <strong>JWT токены:</strong> Безопасная аутентификация</p>
+                    <p style="margin-bottom: 15px;">✓ <strong>Хеширование паролей:</strong> bcrypt для защиты данных</p>
+                    <p style="margin-bottom: 15px;">✓ <strong>CORS:</strong> Контроль доступа к API</p>
+                    <p>✓ <strong>Валидация данных:</strong> Pydantic схемы</p>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>🚀 Roadmap</h3>
+                <div class="roadmap-item">
+                    <div class="roadmap-status done">✅</div>
+                    <div class="roadmap-content">
+                        <div class="roadmap-title">Базовая функциональность</div>
+                        <div class="roadmap-desc">Регистрация, метрики, статистика</div>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <div class="roadmap-status in-progress">🚧</div>
+                    <div class="roadmap-content">
+                        <div class="roadmap-title">Мобильное приложение</div>
+                        <div class="roadmap-desc">React Native разработка</div>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <div class="roadmap-status planned">📅</div>
+                    <div class="roadmap-content">
+                        <div class="roadmap-title">Интеграция с wearables</div>
+                        <div class="roadmap-desc">Apple Health, Google Fit</div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+    <script src="/static/js/common.js?v=4.0"></script>
+</body>
+</html>

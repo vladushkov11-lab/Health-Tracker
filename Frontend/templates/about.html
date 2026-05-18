@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О нас - Health Tracker</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=5.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
+    
+    <!-- ПРИМЕНЯЕМ ТЕМУ ДО ЗАГРУЗКИ -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="/" class="nav-link">Health<span>Tracker</span></a>
+            </div>
+            <div class="nav-user">
+                <a href="/" class="btn-secondary">Дашборд</a>
+                <a href="/stats" class="btn-secondary">Статистика</a>
+                <a href="/project" class="btn-secondary">О проекте</a>
+                <a href="/docs" class="btn-secondary">Документация</a>
+                <button id="theme-toggle" class="theme-toggle" title="Переключить тему">🌙</button>
+            </div>
+        </nav>
+
+        <main class="dashboard">
+            <div class="dashboard-header" style="text-align: center;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 10px;">О разработчике</h1>
+                <p style="color: var(--text-secondary);">Backend разработчик Health Tracker</p>
+            </div>
+
+            <div class="info-card">
+                <h3>👨‍💻 Обо мне</h3>
+                <div class="team-grid">
+                    <div class="team-card fade-in-up stagger-1">
+                        <div class="team-avatar">👨‍💻</div>
+                        <div class="team-role">Backend Разработчик</div>
+                        <div class="team-bio">Архитектура, API, базы данных, безопасность</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card fade-in-up stagger-2">
+                <h3>🎯 Моя миссия</h3>
+                <p>Я создаю инструменты, которые помогают людям заботиться о своём здоровье. Проект Health Tracker — это результат моей passion к технологиям и здоровому образу жизни.</p>
+                <p style="margin-top: 15px;">Я верю, что здоровый образ жизни должен быть доступным, простым и приятным. Поэтому я создал интуитивный и красивый интерфейс, который мотивирует отслеживать прогресс каждый день.</p>
+            </div>
+
+            <div class="info-card fade-in-up stagger-3">
+                <h3>📞 Контакты</h3>
+                <div class="contact-grid">
+                    <div class="contact-item fade-in-up stagger-1">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-info">
+                            <div class="contact-label">Email</div>
+                            <div class="contact-value">vladushkov11@gmail.com</div>
+                        </div>
+                    </div>
+                    <div class="contact-item fade-in-up stagger-2">
+                        <div class="contact-icon">💻</div>
+                        <div class="contact-info">
+                            <div class="contact-label">GitHub</div>
+                            <div class="contact-value">https://github.com/vladushkov11-lab</div>
+                        </div>
+                    </div>
+                    <div class="contact-item fade-in-up stagger-3">
+                        <div class="contact-icon">📌</div>
+                        <div class="contact-info">
+                            <div class="contact-label">Версия</div>
+                            <div class="contact-value">v1.0.0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/static/js/common.js?v=4.0"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Health Tracker</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=5.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
+    
+    <!-- ПРИМЕНЯЕМ ТЕМУ ДО ЗАГРУЗКИ -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="/" class="nav-link">Health<span>Tracker</span></a>
+            </div>
+            <div class="nav-user">
+                <span style="color: var(--text-secondary);">Гость</span>
+                <a href="/login" class="btn-secondary">Вход</a>
+                <button id="theme-toggle" class="theme-toggle" title="Переключить тему">🌙</button>
+            </div>
+        </nav>
+
+        <div class="auth-card">
+            <h1 class="logo">Health<span>Tracker</span></h1>
+            <p class="tagline">Отслеживай своё здоровье</p>
+            
+            <div class="auth-tabs">
+                <a href="/login" class="tab-btn">Вход</a>
+                <button class="tab-btn active" data-tab="register">Регистрация</button>
+            </div>
+
+            <form id="register-form" class="auth-form active">
+                <div class="form-group">
+                    <label for="register-firstname">Имя</label>
+                    <input type="text" id="register-firstname" required placeholder="Иван">
+                </div>
+                <div class="form-group">
+                    <label for="register-lastname">Фамилия</label>
+                    <input type="text" id="register-lastname" required placeholder="Иванов">
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="register-phone">Телефон</label>
+                    <input type="tel" id="register-phone" required placeholder="+7 (999) 000-00-00">
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Пароль</label>
+                    <input type="password" id="register-password" required placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label for="register-password-check">Повторите пароль</label>
+                    <input type="password" id="register-password-check" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-primary">Зарегистрироваться</button>
+                <p id="register-error" class="error-message"></p>
+            </form>
+
+            <div class="auth-footer">
+                <p>Уже есть аккаунт? <a href="/login">Войдите</a></p>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/common.js?v=4.0"></script>
+    <script src="/static/js/auth.js?v=4.0"></script>
+</body>
+</html>

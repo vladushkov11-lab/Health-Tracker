@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Документация - Health Tracker</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=5.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
+    
+    <!-- ПРИМЕНЯЕМ ТЕМУ ДО ЗАГРУЗКИ -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="/" class="nav-link">Health<span>Tracker</span></a>
+            </div>
+            <div class="nav-user">
+                <a href="/" class="btn-secondary">Дашборд</a>
+                <a href="/stats" class="btn-secondary">Статистика</a>
+                <a href="/project" class="btn-secondary">О проекте</a>
+                <a href="/about" class="btn-secondary">О нас</a>
+                <button id="theme-toggle" class="theme-toggle" title="Переключить тему">🌙</button>
+            </div>
+        </nav>
+
+        <main class="dashboard" style="display: flex; gap: 30px;">
+            <aside class="docs-nav" style="min-width: 250px;">
+                <h4>📚 Содержание</h4>
+                <ul>
+                    <li><a href="#quick-start">Быстрый старт</a></li>
+                    <li><a href="#metrics">Что отслеживать</a></li>
+                    <li><a href="#statistics">Статистика</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+            </aside>
+
+            <div class="docs-content">
+                <div class="dashboard-header" style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Документация</h1>
+                    <p style="color: var(--text-secondary);">Руководство по использованию Health Tracker</p>
+                </div>
+
+                <div id="quick-start" class="info-card docs-section">
+                    <h3>🚀 Быстрый старт</h3>
+                    <ol style="color: var(--text-secondary); line-height: 2; padding-left: 20px;">
+                        <li style="margin-bottom: 10px;">Зарегистрируйтесь или войдите в систему</li>
+                        <li style="margin-bottom: 10px;">Заполните профиль: рост, вес, цели</li>
+                        <li style="margin-bottom: 10px;">Начните добавлять метрики: шаги, калории, сон</li>
+                        <li style="margin-bottom: 10px;">Следите за статистикой и прогрессом</li>
+                        <li>Получайте рекомендации и улучшайте здоровье!</li>
+                    </ol>
+                </div>
+
+                <div id="metrics" class="info-card docs-section">
+                    <h3>📊 Что можно отслеживать?</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">👣</div>
+                            <div class="stat-info">
+                                <span class="stat-value">Шаги</span>
+                                <span class="stat-label">Ежедневная активность</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🔥</div>
+                            <div class="stat-info">
+                                <span class="stat-value">Калории</span>
+                                <span class="stat-label">Расход и потребление</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">😴</div>
+                            <div class="stat-info">
+                                <span class="stat-value">Сон</span>
+                                <span class="stat-label">Качество и продолжительность</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💧</div>
+                            <div class="stat-info">
+                                <span class="stat-value">Вода</span>
+                                <span class="stat-label">Потребление жидкости</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="statistics" class="info-card docs-section">
+                    <h3>📈 Статистика и аналитика</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 15px;">
+                        <strong>Графики:</strong> Визуализация трендов по всем метрикам за выбранный период (7, 14, 30, 90 дней)
+                    </p>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 15px;">
+                        <strong>Рекомендации:</strong> Автоматические советы на основе ваших данных
+                    </p>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 15px;">
+                        <strong>Цели:</strong> Настройте личные цели по шагам, весу и отслеживайте прогресс
+                    </p>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        <strong>Экспорт:</strong> В будущем будет доступна возможность экспорта данных
+                    </p>
+                </div>
+
+                <div id="faq" class="info-card docs-section">
+                    <h3>❓ FAQ</h3>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Как сбросить пароль?
+                            <span class="faq-icon">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            В данный момент функция восстановления пароля находится в разработке. Свяжитесь с поддержкой через email.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Можно ли удалить аккаунт?
+                            <span class="faq-icon">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            Да, вы можете удалить аккаунт в разделе Профиль → Опасная зона. Это действие необратимо.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Где хранятся мои данные?
+                            <span class="faq-icon">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            Все данные хранятся в зашифрованном виде на наших серверах. Мы используем PostgreSQL с шифрованием на уровне базы данных.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/static/js/common.js?v=4.0"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Документация - Health Tracker</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=5.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
+    
+    <!-- ПРИМЕНЯЕМ ТЕМУ ДО ЗАГРУЗКИ -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="/" class="nav-link">Health<span>Tracker</span></a>
+            </div>
+            <div class="nav-user">
+                <a href="/" class="btn-secondary">Дашборд</a>
+                <a href="/stats" class="btn-secondary">Статистика</a>
+                <a href="/project" class="btn-secondary">О проекте</a>
+                <a href="/about" class="btn-secondary">О нас</a>
+                <button id="theme-toggle" class="theme-toggle" title="Переключить тему">🌙</button>
+            </div>
+        </nav>
+
+        <main class="dashboard" style="display: flex; gap: 30px;">
+            <aside class="docs-nav" style="min-width: 250px;">
+                <h4>📚 Содержание</h4>
+                <ul>
+                    <li><a href="#quick-start">Быстрый старт</a></li>
+                    <li><a href="#metrics">Что отслеживать</a></li>
+                    <li><a href="#statistics">Статистика</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+            </aside>
+
+            <div class="docs-content">
+                <div class="dashboard-header" style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Документация</h1>
+                    <p style="color: var(--text-secondary);">Руководство по использованию Health Tracker</p>
+                </div>
+
+                <div id="quick-start" class="info-card docs-section">
+                    <h3>🚀 Быстрый старт</h3>
+                    <ol style="color: var(--text-secondary); line-height: 2; padding-left: 20px;">
+                        <li style="margin-bottom: 10px;">Зарегистрируйтесь или войдите в систему</li>
+                        <li style="margin-bottom: 10px;">Заполните профиль: рост, вес, цели</li>
+                        <li style="margin-bottom: 10px;">Начните добавлять метрики: шаги, калории, сон</li>
+                        <li style="margin-bottom: 10px;">Следите за статистикой и прогрессом</li>
+                        <li>Получайте рекомендации и улучшайте здоровье!</li>
+                    </ol>
+                </div>
+
+                <div id="metrics" class="info-card docs-section">
+                    <h3>📊 Что можно отслеживать?</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">👣</div>
+                            <div class="stat-info">
+                                <span class="stat-value">Шаги</span>
+                                <span class="stat-label">Ежедневная активность</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🔥</div>
+                            <div class="stat-info">
+                                <span class="stat-value">Калории</span>
+                                <span class="stat-label">Расход и потребление</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">😴</div>
+                            <div class="stat-info">
+                                <span class="stat-value">Сон</span>
+                                <span class="stat-label">Качество и продолжительность</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💧</div>
+                            <div class="stat-info">
+                                <span class="stat-value">Вода</span>
+                                <span class="stat-label">Потребление жидкости</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="statistics" class="info-card docs-section">
+                    <h3>📈 Статистика и аналитика</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 15px;">
+                        <strong>Графики:</strong> Визуализация трендов по всем метрикам за выбранный период (7, 14, 30, 90 дней)
+                    </p>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 15px;">
+                        <strong>Рекомендации:</strong> Автоматические советы на основе ваших данных
+                    </p>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 15px;">
+                        <strong>Цели:</strong> Настройте личные цели по шагам, весу и отслеживайте прогресс
+                    </p>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        <strong>Экспорт:</strong> В будущем будет доступна возможность экспорта данных
+                    </p>
+                </div>
+
+                <div id="faq" class="info-card docs-section">
+                    <h3>❓ FAQ</h3>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Как сбросить пароль?
+                            <span class="faq-icon">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            В данный момент функция восстановления пароля находится в разработке. Свяжитесь с поддержкой через email.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Можно ли удалить аккаунт?
+                            <span class="faq-icon">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            Да, вы можете удалить аккаунт в разделе Профиль → Опасная зона. Это действие необратимо.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Где хранятся мои данные?
+                            <span class="faq-icon">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            Все данные хранятся в зашифрованном виде на наших серверах. Мы используем PostgreSQL с шифрованием на уровне базы данных.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/static/js/common.js?v=4.0"></script>
+</body>
+</html>

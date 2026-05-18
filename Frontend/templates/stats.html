@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистика - Health Tracker</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=5.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- ПРИМЕНЯЕМ ТЕМУ ДО ЗАГРУЗКИ -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="/" class="nav-link">Health<span>Tracker</span></a>
+            </div>
+            <div class="nav-user">
+                <span id="user-name">Пользователь</span>
+                <a href="/" class="btn-secondary">Дашборд</a>
+                <a href="/profile" class="btn-secondary">Профиль</a>
+                <a href="/about" class="btn-secondary">О нас</a>
+                <a href="/docs" class="btn-secondary">Документация</a>
+                <a href="/project" class="btn-secondary">О проекте</a>
+                <button id="theme-toggle" class="theme-toggle" title="Переключить тему">🌙</button>
+                <button id="logout-btn" class="btn-secondary">Выйти</button>
+            </div>
+        </nav>
+
+        <main class="dashboard">
+            <div class="dashboard-header">
+                <h2>📊 Общая статистика</h2>
+                <select id="days-select" class="btn-secondary" style="width: auto;">
+                    <option value="7">7 дней</option>
+                    <option value="14">14 дней</option>
+                    <option value="30" selected>30 дней</option>
+                    <option value="90">90 дней</option>
+                </select>
+            </div>
+
+            <div class="metrics-section">
+                <h3>Графики метрик</h3>
+                <div class="chart-container">
+                    <canvas id="main-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="metrics-section">
+                <h3>Детали по метрикам</h3>
+                <div class="stats-grid">
+                    <div class="stat-card clickable fade-in-up stagger-1" onclick="window.location.href='/stats/metric/steps'">
+                        <div class="stat-icon">👣</div>
+                        <div class="stat-info">
+                            <span class="stat-value">Шаги</span>
+                            <span class="stat-label">Детальная статистика</span>
+                        </div>
+                    </div>
+                    <div class="stat-card clickable fade-in-up stagger-2" onclick="window.location.href='/stats/metric/calories'">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-info">
+                            <span class="stat-value">Калории</span>
+                            <span class="stat-label">Детальная статистика</span>
+                        </div>
+                    </div>
+                    <div class="stat-card clickable fade-in-up stagger-3" onclick="window.location.href='/stats/metric/sleep'">
+                        <div class="stat-icon">😴</div>
+                        <div class="stat-info">
+                            <span class="stat-value">Сон</span>
+                            <span class="stat-label">Детальная статистика</span>
+                        </div>
+                    </div>
+                    <div class="stat-card clickable fade-in-up stagger-4" onclick="window.location.href='/stats/metric/mood'">
+                        <div class="stat-icon">😊</div>
+                        <div class="stat-info">
+                            <span class="stat-value">Настроение</span>
+                            <span class="stat-label">Детальная статистика</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metrics-section">
+                <h3>💡 Рекомендации</h3>
+                <div id="insights-box" class="insights-box">
+                    <ul id="insights-list" class="insights-list">
+                        <li>Загрузка рекомендаций...</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/static/js/common.js?v=4.0"></script>
+    <script src="/static/js/stats.js?v=4.0"></script>
+</body>
+</html>

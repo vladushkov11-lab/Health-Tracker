@@ -1,0 +1,174 @@
+#БД ДЛЯ СЕРВИСА АУТЕНТИФИКАЦИИ
+services:
+# БАЗЫ ДАННЫХ
+  postgres_auth:
+    image: postgres:17-alpine
+    container_name: postgres_auth
+    environment:
+      POSTGRES_DB: auth
+      POSTGRES_USER: auth
+      POSTGRES_PASSWORD: dbur6960
+    ports:
+      - "5435:5432"  
+    volumes:
+      - auth-postgres-data:/var/lib/postgresql/data
+    networks:
+      - my_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth -d auth"]
+      interval: 10s
+      timeout: 5s
+  postgres_app:
+    image: postgres:17-alpine
+    container_name: postgres_app
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: dbur6960
+    ports:
+      - "5436:5432"  
+    volumes:
+      - app-postgres-data:/var/lib/postgresql/data
+    networks:
+      - my_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 10s
+      timeout: 5s
+# AUTH_SERVICE
+  auth_service:
+    build:
+      context: ./Auth_service
+      dockerfile: Dockerfile
+    env_file:
+      - ./Auth_service/.env
+    container_name: auth_service
+    ports:
+      - ":8000"
+    networks:
+      - my_network
+    environment:
+      - DATABASE_URL=postgresql://auth:dbur6960@postgres_auth:5432/auth
+      - HOST=0.0.0.0
+      - PORT=8000
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import socket; s=socket.socket(); s.connect(('localhost',8000)); s.close()\" 2>/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    depends_on:
+      postgres_auth:
+          condition: service_healthy
+    restart: unless-stopped
+# APP_SERVICE
+  app_service:
+    build:
+      context: ./APP_service
+      dockerfile: Dockerfile
+    container_name: app_service
+    env_file:
+      - ./APP_service/.env 
+    ports:
+      - ":8002"
+    networks:
+      - my_network
+    environment:
+      - DATABASE_URL=postgresql://app:dbur6960@postgres_app:5432/app
+      - HOST=0.0.0.0
+      - PORT=8002
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import socket; s=socket.socket(); s.connect(('localhost',8002)); s.close()\" 2>/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    depends_on:
+      postgres_app:
+        condition: service_healthy
+    restart: unless-stopped
+# GATEWAY
+  gateway:
+    build:
+      context: ./Gateway
+      dockerfile: Dockerfile
+    container_name: gateway
+    env_file:
+      - ./Gateway/.env 
+    ports:
+      - "8001:8001"
+    networks:
+      - my_network
+    environment:
+      - AUTH_SERVICE_URL=http://auth_service:8000
+      - APP_SERVICE_URL=http://app_service:8002
+      - HOST=0.0.0.0
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8001/ || python -c \"import socket; s=socket.socket(); s.connect(('localhost',8001)); s.close()\" 2>/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    depends_on:
+      - auth_service
+      - app_service
+    restart: unless-stopped
+#Frontend
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "8003:8003"
+    environment:
+      - HOST=0.0.0.0
+      - GATEWAY_URL=http://gateway:8001
+    networks:
+      - my_network
+    restart: unless-stopped
+#TESTS
+  tests:
+    build:
+      context: ./Gateway
+      dockerfile: Dockerfile
+    container_name: test_runner
+    environment:
+      - GATEWAY_URL=http://gateway:8001
+      - AUTH_SERVICE_URL=http://auth_service:8000
+      - APP_SERVICE_URL=http://app_service:8002
+    command: >
+        sh -c "
+        echo '⏳ Waiting for infrastructure...' &&
+        sleep 20 &&
+        echo '' &&
+        echo '========================================' &&
+        echo 'Running UNIT tests (Gateway/tests)...' &&
+        echo '========================================' &&
+        pytest tests/ -v --tb=short &&
+        echo '' &&
+        echo '========================================' &&
+        echo 'Running INTEGRATION tests (Gateway/tests_integration)...' &&
+        echo '========================================' &&
+        pytest tests_integration/test_e2e.py::TestFullRegistrationFlow -v --tb=short -m integration &&
+        echo '' &&
+        echo '🎉 ALL TESTS PASSED!'
+        "
+    networks:
+      - my_network
+    depends_on:
+      gateway:
+        condition: service_healthy
+      auth_service:
+        condition: service_healthy
+      app_service:
+        condition: service_healthy
+    profiles:
+      - test
+
+volumes:
+  auth-postgres-data:
+  app-postgres-data:
+networks:
+  my_network:
+    driver: bridge
