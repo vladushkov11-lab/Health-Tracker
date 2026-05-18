@@ -5,25 +5,18 @@ from database.dao_stats import get_all_metrics_stats
 from api.logging_config import logger
 
 async def get_user_stats(x_user_id: str, user_data: Optional[Dict[str, Any]] = None, days: int = 10) -> Dict[str, Any]:
-    """
-    Собирает полную статистику по пользователю с рекомендациями.
-    Объединяет данные из БД (dao_stats) и аналитику (тренды, волатильность).
-    """
-    # 1. Получаем сырые метрики из БД
     try:
         metrics = await get_metrics_by_user_id(x_user_id=x_user_id, limit=days)
     except Exception as e:
         logger.error(f"Error fetching metrics: {e}")
         metrics = []
     
-    # 2. Получаем агрегированную статистику из БД
     try:
         db_stats = await get_all_metrics_stats(x_user_id=x_user_id, days=days)
     except Exception as e:
         logger.error(f"Error fetching stats: {e}")
         db_stats = {}
     
-    # 3. Если метрик нет, возвращаем пустой результат
     if not metrics:
         return {
             "total_metrics": 0,
@@ -32,25 +25,21 @@ async def get_user_stats(x_user_id: str, user_data: Optional[Dict[str, Any]] = N
             "insights": ["Нет данных для анализа. Добавьте метрики."]
         }
     
-    # 4. Конвертируем значения и сортируем по дате
     converted_metrics = []
     for m in metrics:
         converted_m = {k: float(v) if isinstance(v, (int, float)) else (0 if v is None else v) for k, v in m.items()}
         converted_metrics.append(converted_m)
     
-    metrics_sorted = sorted(converted_metrics, key=lambda x: x.get("date", ""))
+    metrics_sorted = sorted(converted_metrics, key=lambda x: x.get("date_of_metrics", ""))
     
-    # 5. Расчёт периода
-    dates = [m["date"] for m in metrics_sorted if m.get("date")]
+    dates = [m["date_of_metrics"] for m in metrics_sorted if m.get("date_of_metrics")]
     period_days = (max(dates) - min(dates)).days + 1 if dates else len(metrics_sorted)
     
-    # 6. Расчёт средних и сумм (дублируем для аналитики)
     numeric_fields = ["steps", "calories", "distance", "sleep_hours", "sleep_score", "calories_intake", "water_ml", "mood", "stress_level"]
     field_values = {field: [float(m.get(field, 0) or 0) for m in metrics_sorted] for field in numeric_fields}
     averages = {field: round(sum(values) / len(values), 2) for field, values in field_values.items() if values}
     totals = {field: sum(values) for field, values in field_values.items() if values}
     
-    # 7. Тренды (линейная регрессия)
     trends = {}
     for field, values in field_values.items():
         if len(values) >= 2:
@@ -63,7 +52,6 @@ async def get_user_stats(x_user_id: str, user_data: Optional[Dict[str, Any]] = N
             slope = round((n * sum_xy - sum_x * sum_y) / denominator, 2) if denominator != 0 else 0
             trends[field] = {"slope": slope, "direction": "up" if slope > 0.01 else "down" if slope < -0.01 else "flat"}
     
-    # 8. Волатильность
     volatility = {}
     for field, values in field_values.items():
         if len(values) >= 2:
@@ -73,7 +61,6 @@ async def get_user_stats(x_user_id: str, user_data: Optional[Dict[str, Any]] = N
             cv = round((std_dev / mean) * 100, 2) if mean != 0 else 0
             volatility[field] = {"std_dev": std_dev, "cv": cv, "level": "high" if cv > 30 else "medium" if cv > 15 else "low"}
     
-    # 9. Генерация рекомендаций
     insights = generate_insights(averages, trends, volatility, user_data, db_stats)
     
     return {
@@ -90,7 +77,6 @@ async def get_user_stats(x_user_id: str, user_data: Optional[Dict[str, Any]] = N
 
 
 def build_user_profile(user_data: Dict[str, Any], averages: Dict[str, float]) -> Dict[str, Any]:
-    """Строит профиль пользователя с BMI и целями."""
     height = float(user_data.get("height", 0)) if user_data.get("height") else 0
     weight = float(user_data.get("weight", 0)) if user_data.get("weight") else 0
     target_weight = float(user_data.get("target_weight", 0)) if user_data.get("target_weight") else 0
@@ -106,13 +92,11 @@ def build_user_profile(user_data: Dict[str, Any], averages: Dict[str, float]) ->
         "gender": gender
     }
     
-    # BMI
     if height > 0 and weight > 0:
         bmi = round(weight / ((height / 100) ** 2), 2)
         profile["bmi"] = bmi
         profile["bmi_category"] = "underweight" if bmi < 18.5 else "normal" if bmi < 25 else "overweight" if bmi < 30 else "obese"
     
-    # Прогресс по весу
     if weight > 0 and target_weight > 0:
         profile["weight_progress"] = {
             "difference": round(target_weight - weight, 2),
@@ -153,7 +137,6 @@ def build_user_profile(user_data: Dict[str, Any], averages: Dict[str, float]) ->
 def generate_insights(averages: Dict[str, float], trends: Dict[str, Any], 
                         volatility: Dict[str, Any], user_data: Dict[str, Any], 
                         db_stats: Dict[str, Any]) -> List[str]:
-    """Генерирует рекомендации на основе средних значений, трендов и профиля."""
     insights = []
     
     # Сон

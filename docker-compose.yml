@@ -5,9 +5,9 @@ services:
     image: postgres:17-alpine
     container_name: postgres_auth
     environment:
-      POSTGRES_DB: auth
-      POSTGRES_USER: auth
-      POSTGRES_PASSWORD: dbur6960
+      POSTGRES_DB: ${POSTGRES_DB_AUTH}
+      POSTGRES_USER: ${POSTGRES_USER_AUTH}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_AUTH}
     ports:
       - "5435:5432"  
     volumes:
@@ -22,9 +22,9 @@ services:
     image: postgres:17-alpine
     container_name: postgres_app
     environment:
-      POSTGRES_DB: app
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: dbur6960
+      POSTGRES_DB: ${POSTGRES_DB_APP}
+      POSTGRES_USER: ${POSTGRES_USER_APP}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_APP}
     ports:
       - "5436:5432"  
     volumes:
@@ -40,17 +40,23 @@ services:
     build:
       context: ./Auth_service
       dockerfile: Dockerfile
-    env_file:
-      - ./Auth_service/.env
     container_name: auth_service
     ports:
       - ":8000"
     networks:
       - my_network
     environment:
-      - DATABASE_URL=postgresql://auth:dbur6960@postgres_auth:5432/auth
       - HOST=0.0.0.0
       - PORT=8000
+      - DB_USER=${DB_USER_AUTH}
+      - DB_PASSWORD=${DB_PASSWORD_AUTH}
+      - DB_HOST=${DB_HOST_AUTH}
+      - DB_PORT=${DB_PORT_AUTH}
+      - DB_NAME=${DB_NAME_AUTH}
+      - SECRET_KEYS=${SECRET_KEYS}
+      - DB_HOST_ALEMBIC=${DB_HOST_ALEMBIC}
+      - DB_PORT_ALEMBIC=${DB_PORT_ALEMBIC_AUTH}
+      - ALGORITHMS=${ALGORITHMS}
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import socket; s=socket.socket(); s.connect(('localhost',8000)); s.close()\" 2>/dev/null || exit 1"]
       interval: 10s
@@ -67,16 +73,22 @@ services:
       context: ./APP_service
       dockerfile: Dockerfile
     container_name: app_service
-    env_file:
-      - ./APP_service/.env 
     ports:
       - ":8002"
     networks:
       - my_network
     environment:
-      - DATABASE_URL=postgresql://app:dbur6960@postgres_app:5432/app
       - HOST=0.0.0.0
       - PORT=8002
+      - DB_USER=${DB_USER_APP}
+      - DB_PASSWORD=${DB_PASSWORD_APP}
+      - DB_HOST=${DB_HOST_APP}
+      - DB_PORT=${DB_PORT_APP}
+      - DB_NAME=${DB_NAME_APP}
+      - SECRET_KEYS=${SECRET_KEYS}
+      - DB_HOST_ALEMBIC=${DB_HOST_ALEMBIC}
+      - DB_PORT_ALEMBIC=${DB_PORT_ALEMBIC_APP}
+      - ALGORITHMS=${ALGORITHMS}
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import socket; s=socket.socket(); s.connect(('localhost',8002)); s.close()\" 2>/dev/null || exit 1"]
       interval: 10s
@@ -93,8 +105,6 @@ services:
       context: ./Gateway
       dockerfile: Dockerfile
     container_name: gateway
-    env_file:
-      - ./Gateway/.env 
     ports:
       - "8001:8001"
     networks:
@@ -103,6 +113,8 @@ services:
       - AUTH_SERVICE_URL=http://auth_service:8000
       - APP_SERVICE_URL=http://app_service:8002
       - HOST=0.0.0.0
+      - SECRET_KEYS=${SECRET_KEYS}
+      - ALGORITHMS=${ALGORITHMS}
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8001/ || python -c \"import socket; s=socket.socket(); s.connect(('localhost',8001)); s.close()\" 2>/dev/null || exit 1"]
       interval: 10s

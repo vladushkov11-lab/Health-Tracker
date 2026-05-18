@@ -28,27 +28,25 @@ async def get_stats(x_user_id: str = Header(default=None, alias="X-User-Id")):
     
 @router.get("/get_stats_detail", response_model=dict, status_code=status.HTTP_200_OK)
 async def get_stats_detail(x_user_id: str = Header(default=None, alias="X-User-Id"), days: int = 30):
-    """Получить детальную статистику по всем метрикам с данными для графиков"""
     try:
         metrics = await get_metrics_by_user_id(x_user_id=x_user_id)
         user_data = await get_profile_by_id(user_id=x_user_id)
         
-        # Фильтруем метрики за последние days дней
         from datetime import datetime, timedelta
         cutoff_date = datetime.now() - timedelta(days=days)
         filtered_metrics = []
         for m in metrics:
             try:
                 metric_date = datetime.fromisoformat(m['date_of_metrics'])
+                if isinstance(metric_date, str):
+                    metric_date = datetime.fromisoformat(metric_date.replace('Z', '+00:00'))
                 if metric_date >= cutoff_date:
                     filtered_metrics.append(m)
             except:
                 filtered_metrics.append(m)
         
-        # Сортируем по дате
         filtered_metrics.sort(key=lambda x: x.get('date_of_metrics', ''), reverse=True)
         
-        # Формируем данные для графиков
         chart_data = {
             "labels": [],
             "datasets": {
@@ -64,7 +62,11 @@ async def get_stats_detail(x_user_id: str = Header(default=None, alias="X-User-I
         }
         
         for metric in reversed(filtered_metrics):
-            date_str = metric.get('date_of_metrics', '')[:10]
+            date_val = metric.get('date_of_metrics', '')
+            if isinstance(date_val, datetime):
+                date_str = date_val.strftime('%Y-%m-%d')
+            else:
+                date_str = str(date_val)[:10]
             chart_data["labels"].append(date_str)
             chart_data["datasets"]["steps"].append(metric.get('steps', 0))
             chart_data["datasets"]["calories"].append(metric.get('calories', 0))
@@ -74,8 +76,7 @@ async def get_stats_detail(x_user_id: str = Header(default=None, alias="X-User-I
             chart_data["datasets"]["stress_level"].append(metric.get('stress_level', 0))
             chart_data["datasets"]["water_ml"].append(metric.get('water_ml', 0))
             chart_data["datasets"]["calories_intake"].append(metric.get('calories_intake', 0))
-        
-        # Общая статистика
+
         stats = await get_user_stats(x_user_id=x_user_id, user_data=user_data, days=days)
         
         return {
@@ -92,7 +93,6 @@ async def get_stats_detail(x_user_id: str = Header(default=None, alias="X-User-I
 
 @router.get("/get_metric_detail/{metric_type}", response_model=dict, status_code=status.HTTP_200_OK)
 async def get_metric_detail(metric_type: str, x_user_id: str = Header(default=None, alias="X-User-Id"), days: int = 30):
-    """Получить детальную статистику по конкретной метрике"""
     try:
         metrics = await get_metrics_by_user_id(x_user_id=x_user_id)
         user_data = await get_profile_by_id(user_id=x_user_id)
@@ -104,6 +104,8 @@ async def get_metric_detail(metric_type: str, x_user_id: str = Header(default=No
         for m in metrics:
             try:
                 metric_date = datetime.fromisoformat(m['date_of_metrics'])
+                if isinstance(metric_date, str):
+                    metric_date = datetime.fromisoformat(metric_date.replace('Z', '+00:00'))
                 if metric_date >= cutoff_date:
                     filtered_metrics.append(m)
             except:
@@ -135,7 +137,11 @@ async def get_metric_detail(metric_type: str, x_user_id: str = Header(default=No
         # Расчёт статистики для конкретной метрики
         values = []
         for metric in reversed(filtered_metrics):
-            date_str = metric.get('date_of_metrics', '')[:10]
+            date_val = metric.get('date_of_metrics', '')
+            if isinstance(date_val, datetime):
+                date_str = date_val.strftime('%Y-%m-%d')
+            else:
+                date_str = str(date_val)[:10]
             value = metric.get(field, 0)
             chart_data["labels"].append(date_str)
             chart_data["values"].append(value)
