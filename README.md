@@ -93,7 +93,7 @@ BMI, BMR, рекомендации по активности
 Backend -	Python 3.11, FastAPI, Uvicorn.
 Базы данных -	PostgreSQL, SQLAlchemy (async), Alembic
 Аутентификация -	JWT, python-jose, bcrypt
-Тестирование	Pytest, pytest-asyncio, httpx (mock)
-Контейнеризация	Docker, Docker Compose
-Фронтенд	Jinja2, Chart.js
+Тестирование -	Pytest, pytest-asyncio, httpx (mock)
+Контейнеризация -	Docker, Docker Compose
+Фронтенд -	Jinja2, Chart.js
 
